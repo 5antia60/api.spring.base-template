@@ -1,6 +1,6 @@
-package com.santiago.base.repository;
+package com.santiago.base.modules.users.repository;
 
-import com.santiago.base.entity.User;
+import com.santiago.base.modules.users.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,5 +1,6 @@
-package com.santiago.base.entity;
+package com.santiago.base.modules.users.entity;
 
+import com.santiago.base.modules.tasks.entity.Task;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

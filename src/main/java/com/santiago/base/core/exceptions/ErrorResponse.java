@@ -1,4 +1,4 @@
-package com.santiago.base.exception;
+package com.santiago.base.core.exceptions;
 
 import java.time.LocalDateTime;
 

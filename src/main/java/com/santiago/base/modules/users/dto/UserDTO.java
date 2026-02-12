@@ -1,4 +1,4 @@
-package com.santiago.base.dto;
+package com.santiago.base.modules.users.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

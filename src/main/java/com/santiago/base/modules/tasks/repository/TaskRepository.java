@@ -1,7 +1,7 @@
-package com.santiago.base.repository;
+package com.santiago.base.modules.tasks.repository;
 
-import com.santiago.base.model.TaskStatus;
-import com.santiago.base.entity.Task;
+import com.santiago.base.modules.tasks.model.TaskStatus;
+import com.santiago.base.modules.tasks.entity.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

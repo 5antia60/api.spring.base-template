@@ -1,6 +1,6 @@
-package com.santiago.base.dto;
+package com.santiago.base.modules.tasks.dto;
 
-import com.santiago.base.model.TaskStatus;
+import com.santiago.base.modules.tasks.model.TaskStatus;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;

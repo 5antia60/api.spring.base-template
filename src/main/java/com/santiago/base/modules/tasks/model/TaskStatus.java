@@ -1,4 +1,4 @@
-package com.santiago.base.model;
+package com.santiago.base.modules.tasks.model;
 
 public enum TaskStatus {
     PENDING,

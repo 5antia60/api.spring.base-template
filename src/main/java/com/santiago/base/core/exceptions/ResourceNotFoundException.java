@@ -1,4 +1,4 @@
-package com.santiago.base.exception;
+package com.santiago.base.core.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {

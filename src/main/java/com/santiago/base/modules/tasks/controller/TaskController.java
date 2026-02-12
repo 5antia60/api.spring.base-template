@@ -1,8 +1,8 @@
-package com.santiago.base.controller;
+package com.santiago.base.modules.tasks.controller;
 
-import com.santiago.base.dto.TaskDTO;
-import com.santiago.base.dto.UpdateTaskDTO;
-import com.santiago.base.service.TaskService;
+import com.santiago.base.modules.tasks.dto.TaskDTO;
+import com.santiago.base.modules.tasks.dto.UpdateTaskDTO;
+import com.santiago.base.modules.tasks.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

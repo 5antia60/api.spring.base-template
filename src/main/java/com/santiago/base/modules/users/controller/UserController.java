@@ -1,8 +1,8 @@
-package com.santiago.base.controller;
+package com.santiago.base.modules.users.controller;
 
-import com.santiago.base.dto.UpdateUserDTO;
-import com.santiago.base.dto.UserDTO;
-import com.santiago.base.service.UserService;
+import com.santiago.base.modules.users.dto.UpdateUserDTO;
+import com.santiago.base.modules.users.dto.UserDTO;
+import com.santiago.base.modules.users.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

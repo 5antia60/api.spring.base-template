@@ -1,4 +1,4 @@
-package com.santiago.base.exception;
+package com.santiago.base.core.exceptions;
 
 public class BusinessException extends RuntimeException {
     public BusinessException(String message) {

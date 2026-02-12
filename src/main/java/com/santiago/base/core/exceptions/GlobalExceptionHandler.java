@@ -1,4 +1,4 @@
-package com.santiago.base.exception;
+package com.santiago.base.core.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

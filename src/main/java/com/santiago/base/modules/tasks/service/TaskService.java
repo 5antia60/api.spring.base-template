@@ -1,13 +1,13 @@
-package com.santiago.base.service;
+package com.santiago.base.modules.tasks.service;
 
-import com.santiago.base.dto.TaskDTO;
-import com.santiago.base.dto.UpdateTaskDTO;
-import com.santiago.base.exception.ResourceNotFoundException;
-import com.santiago.base.entity.Task;
-import com.santiago.base.entity.User;
-import com.santiago.base.model.TaskStatus;
-import com.santiago.base.repository.TaskRepository;
-import com.santiago.base.repository.UserRepository;
+import com.santiago.base.modules.tasks.dto.TaskDTO;
+import com.santiago.base.modules.tasks.dto.UpdateTaskDTO;
+import com.santiago.base.core.exceptions.ResourceNotFoundException;
+import com.santiago.base.modules.tasks.entity.Task;
+import com.santiago.base.modules.users.entity.User;
+import com.santiago.base.modules.tasks.model.TaskStatus;
+import com.santiago.base.modules.tasks.repository.TaskRepository;
+import com.santiago.base.modules.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
