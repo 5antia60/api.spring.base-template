@@ -1,5 +1,6 @@
 package com.santiago.base.controller;
 
+import com.santiago.base.dto.UpdateUserDTO;
 import com.santiago.base.dto.UserDTO;
 import com.santiago.base.service.UserService;
 import jakarta.validation.Valid;
@@ -38,6 +39,15 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserDTO dto) {
         UserDTO updatedUser = userService.update(id, dto);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserDTO> partialUpdate(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateUserDTO dto
+    ) {
+        UserDTO updatedUser = userService.partialUpdate(id, dto);
         return ResponseEntity.ok(updatedUser);
     }
 

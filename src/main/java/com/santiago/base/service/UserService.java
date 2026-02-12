@@ -1,5 +1,6 @@
 package com.santiago.base.service;
 
+import com.santiago.base.dto.UpdateUserDTO;
 import com.santiago.base.dto.UserDTO;
 import com.santiago.base.entity.User;
 import com.santiago.base.exception.ResourceNotFoundException;
@@ -55,6 +56,27 @@ public class UserService {
 
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
+
+        User updatedUser = userRepository.save(user);
+        return convertToDTO(updatedUser);
+    }
+
+    @Transactional
+    public UserDTO partialUpdate(Long id, UpdateUserDTO dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+
+        if (dto.getName() != null) {
+            user.setName(dto.getName());
+        }
+
+        if (dto.getEmail() != null) {
+            if (!user.getEmail().equals(dto.getEmail()) && userRepository.existsByEmail(dto.getEmail())) {
+                throw new BusinessException("Email já cadastrado: " + dto.getEmail());
+            }
+
+            user.setEmail(dto.getEmail());
+        }
 
         User updatedUser = userRepository.save(user);
         return convertToDTO(updatedUser);

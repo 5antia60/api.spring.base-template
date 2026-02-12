@@ -1,6 +1,7 @@
 package com.santiago.base.controller;
 
 import com.santiago.base.dto.TaskDTO;
+import com.santiago.base.dto.UpdateTaskDTO;
 import com.santiago.base.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,12 @@ public class TaskController {
     @PutMapping("/{id}")
     public ResponseEntity<TaskDTO> update(@PathVariable Long id, @Valid @RequestBody TaskDTO dto) {
         TaskDTO updatedTask = taskService.update(id, dto);
+        return ResponseEntity.ok(updatedTask);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<TaskDTO> partialUpdate(@PathVariable Long id, @Valid @RequestBody UpdateTaskDTO dto) {
+        TaskDTO updatedTask = taskService.partialUpdate(id, dto);
         return ResponseEntity.ok(updatedTask);
     }
 

@@ -1,6 +1,7 @@
 package com.santiago.base.service;
 
 import com.santiago.base.dto.TaskDTO;
+import com.santiago.base.dto.UpdateTaskDTO;
 import com.santiago.base.exception.ResourceNotFoundException;
 import com.santiago.base.entity.Task;
 import com.santiago.base.entity.User;
@@ -64,6 +65,27 @@ public class TaskService {
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
         task.setStatus(dto.getStatus());
+
+        Task updatedTask = taskRepository.save(task);
+        return convertToDTO(updatedTask);
+    }
+
+    @Transactional
+    public TaskDTO partialUpdate(Long id, UpdateTaskDTO dto) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + id));
+
+        if (dto.getTitle() != null) {
+            task.setTitle(dto.getTitle());
+        }
+
+        if (dto.getDescription() != null) {
+            task.setDescription(dto.getDescription());
+        }
+
+        if (dto.getStatus() != null) {
+            task.setStatus(dto.getStatus());
+        }
 
         Task updatedTask = taskRepository.save(task);
         return convertToDTO(updatedTask);
