@@ -13,3 +13,6 @@ spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 
 spring.jpa.properties.hibernate.validator.apply_to_ddl=false
+
+jwt.secret=SUA_CHAVE_BASE64_GERADA_AQUI
+jwt.expiration=86400000

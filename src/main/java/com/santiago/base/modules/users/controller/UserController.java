@@ -5,7 +5,6 @@ import com.santiago.base.modules.users.dto.UserDTO;
 import com.santiago.base.modules.users.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,12 +27,6 @@ public class UserController {
     public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
         UserDTO user = userService.findById(id);
         return ResponseEntity.ok(user);
-    }
-
-    @PostMapping
-    public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO dto) {
-        UserDTO newUser = userService.create(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
     @PutMapping("/{id}")

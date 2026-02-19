@@ -48,7 +48,7 @@ public class TaskService {
     @Transactional
     public TaskDTO create(TaskDTO dto) {
         User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + dto.getUserId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + dto.getUserId()));
 
         Task task = convertToEntity(dto);
         task.setUser(user);

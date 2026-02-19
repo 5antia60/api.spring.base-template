@@ -35,17 +35,6 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO create(UserDTO dto) {
-        if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new BusinessException("Email já cadastrado: " + dto.getEmail());
-        }
-
-        User user = convertToEntity(dto);
-        User salvo = userRepository.save(user);
-        return convertToDTO(salvo);
-    }
-
-    @Transactional
     public UserDTO update(Long id, UserDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
@@ -99,12 +88,5 @@ public class UserService {
         dto.setCreatedAt(user.getCreatedAt());
         dto.setUpdatedAt(user.getUpdatedAt());
         return dto;
-    }
-
-    private User convertToEntity(UserDTO dto) {
-        User user = new User();
-        user.setName(dto.getName());
-        user.setEmail(dto.getEmail());
-        return user;
     }
 }
