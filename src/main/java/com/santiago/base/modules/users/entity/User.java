@@ -52,11 +52,11 @@ public class User implements UserDetails {
     private List<Task> tasks = new ArrayList<>();
 
     @CreationTimestamp
-    @Column(name = "createdAt", nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updatedAt")
+    @Column
     private LocalDateTime updatedAt;
 
     @Override
