@@ -3,6 +3,7 @@ package com.santiago.base.modules.tasks.controller;
 import com.santiago.base.modules.tasks.dto.TaskDTO;
 import com.santiago.base.modules.tasks.dto.UpdateTaskDTO;
 import com.santiago.base.modules.tasks.service.TaskService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/tasks")
 @RequiredArgsConstructor
+@Tag(name = "Tasks", description = "Tasks entity routes")
 public class TaskController {
 
     private final TaskService taskService;

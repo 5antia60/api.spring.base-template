@@ -4,6 +4,7 @@ import com.santiago.base.modules.auth.dto.AuthResponseDTO;
 import com.santiago.base.modules.auth.dto.LoginRequestDTO;
 import com.santiago.base.modules.auth.dto.RegisterRequestDTO;
 import com.santiago.base.modules.auth.service.AuthService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Tag(name = "Auth", description = "Auth routes")
 public class AuthController {
 
     private final AuthService authService;

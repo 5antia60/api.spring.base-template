@@ -3,6 +3,7 @@ package com.santiago.base.modules.users.controller;
 import com.santiago.base.modules.users.dto.UpdateUserDTO;
 import com.santiago.base.modules.users.dto.UserDTO;
 import com.santiago.base.modules.users.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
+@Tag(name = "Users", description = "Users entity routes")
 public class UserController {
 
     private final UserService userService;
