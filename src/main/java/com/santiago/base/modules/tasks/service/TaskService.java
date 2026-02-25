@@ -1,6 +1,7 @@
 package com.santiago.base.modules.tasks.service;
 
-import com.santiago.base.modules.tasks.dto.TaskDTO;
+import com.santiago.base.modules.tasks.dto.CreateTaskDTO;
+import com.santiago.base.modules.tasks.dto.ResponseTaskDTO;
 import com.santiago.base.modules.tasks.dto.UpdateTaskDTO;
 import com.santiago.base.core.exceptions.ResourceNotFoundException;
 import com.santiago.base.modules.tasks.entity.Task;
@@ -23,42 +24,42 @@ public class TaskService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public List<TaskDTO> findAll() {
+    public List<ResponseTaskDTO> findAll() {
         return taskRepository.findAll()
                 .stream()
-                .map(this::convertToDTO)
+                .map(this::convertToResponseTaskDTO)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public TaskDTO findById(Long id) {
+    public ResponseTaskDTO findById(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + id));
-        return convertToDTO(task);
+        return convertToResponseTaskDTO(task);
     }
 
     @Transactional(readOnly = true)
-    public List<TaskDTO> findByUserId(Long userId) {
+    public List<ResponseTaskDTO> findByUserId(Long userId) {
         return taskRepository.findByUserId(userId)
                 .stream()
-                .map(this::convertToDTO)
+                .map(this::convertToResponseTaskDTO)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public TaskDTO create(TaskDTO dto) {
+    public CreateTaskDTO create(CreateTaskDTO dto) {
         User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + dto.getUserId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + dto.getUserId()));
 
         Task task = convertToEntity(dto);
         task.setUser(user);
 
         Task newTask = taskRepository.save(task);
-        return convertToDTO(newTask);
+        return convertToCreateTaskDTO(newTask);
     }
 
     @Transactional
-    public TaskDTO update(Long id, TaskDTO dto) {
+    public ResponseTaskDTO update(Long id, CreateTaskDTO dto) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + id));
 
@@ -67,11 +68,11 @@ public class TaskService {
         task.setStatus(dto.getStatus());
 
         Task updatedTask = taskRepository.save(task);
-        return convertToDTO(updatedTask);
+        return convertToResponseTaskDTO(updatedTask);
     }
 
     @Transactional
-    public TaskDTO partialUpdate(Long id, UpdateTaskDTO dto) {
+    public ResponseTaskDTO partialUpdate(Long id, UpdateTaskDTO dto) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + id));
 
@@ -88,7 +89,7 @@ public class TaskService {
         }
 
         Task updatedTask = taskRepository.save(task);
-        return convertToDTO(updatedTask);
+        return convertToResponseTaskDTO(updatedTask);
     }
 
     @Transactional
@@ -99,8 +100,12 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
-    private TaskDTO convertToDTO(Task task) {
-        TaskDTO dto = new TaskDTO();
+    private ResponseTaskDTO convertToResponseTaskDTO(Task task) {
+        return new ResponseTaskDTO(task);
+    }
+
+    private CreateTaskDTO convertToCreateTaskDTO(Task task) {
+        CreateTaskDTO dto = new CreateTaskDTO();
         dto.setId(task.getId());
         dto.setTitle(task.getTitle());
         dto.setDescription(task.getDescription());
@@ -112,7 +117,7 @@ public class TaskService {
         return dto;
     }
 
-    private Task convertToEntity(TaskDTO dto) {
+    private Task convertToEntity(CreateTaskDTO dto) {
         Task task = new Task();
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());

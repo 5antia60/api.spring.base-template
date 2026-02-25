@@ -1,7 +1,8 @@
 package com.santiago.base.modules.users.controller;
 
+import com.santiago.base.modules.users.dto.ResponseUserDTO;
 import com.santiago.base.modules.users.dto.UpdateUserDTO;
-import com.santiago.base.modules.users.dto.UserDTO;
+import com.santiago.base.modules.users.dto.CreateUserDTO;
 import com.santiago.base.modules.users.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -20,29 +21,29 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> findAll() {
-        List<UserDTO> users = userService.findAll();
+    public ResponseEntity<List<ResponseUserDTO>> findAll() {
+        List<ResponseUserDTO> users = userService.findAll();
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
-        UserDTO user = userService.findById(id);
+    public ResponseEntity<ResponseUserDTO> findById(@PathVariable Long id) {
+        ResponseUserDTO user = userService.findById(id);
         return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserDTO dto) {
-        UserDTO updatedUser = userService.update(id, dto);
+    public ResponseEntity<ResponseUserDTO> update(@PathVariable Long id, @Valid @RequestBody CreateUserDTO dto) {
+        ResponseUserDTO updatedUser = userService.update(id, dto);
         return ResponseEntity.ok(updatedUser);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDTO> partialUpdate(
+    public ResponseEntity<ResponseUserDTO> partialUpdate(
             @PathVariable Long id,
             @Valid @RequestBody UpdateUserDTO dto
     ) {
-        UserDTO updatedUser = userService.partialUpdate(id, dto);
+        ResponseUserDTO updatedUser = userService.partialUpdate(id, dto);
         return ResponseEntity.ok(updatedUser);
     }
 

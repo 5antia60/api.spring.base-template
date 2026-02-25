@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+public class CreateUserDTO {
     private Long id;
 
     @NotBlank(message = "Nome é obrigatório")

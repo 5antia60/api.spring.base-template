@@ -1,6 +1,7 @@
 package com.santiago.base.modules.tasks.controller;
 
-import com.santiago.base.modules.tasks.dto.TaskDTO;
+import com.santiago.base.modules.tasks.dto.CreateTaskDTO;
+import com.santiago.base.modules.tasks.dto.ResponseTaskDTO;
 import com.santiago.base.modules.tasks.dto.UpdateTaskDTO;
 import com.santiago.base.modules.tasks.service.TaskService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,8 +22,8 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping
-    public ResponseEntity<List<TaskDTO>> findAll(@RequestParam(required = false) Long userId) {
-        List<TaskDTO> tasks;
+    public ResponseEntity<List<ResponseTaskDTO>> findAll(@RequestParam(required = false) Long userId) {
+        List<ResponseTaskDTO> tasks;
 
         if (userId != null) {
             tasks = taskService.findByUserId(userId);
@@ -34,26 +35,26 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskDTO> findById(@PathVariable Long id) {
-        TaskDTO task = taskService.findById(id);
+    public ResponseEntity<ResponseTaskDTO> findById(@PathVariable Long id) {
+        ResponseTaskDTO task = taskService.findById(id);
         return ResponseEntity.ok(task);
     }
 
     @PostMapping
-    public ResponseEntity<TaskDTO> create(@Valid @RequestBody TaskDTO dto) {
-        TaskDTO newTask = taskService.create(dto);
+    public ResponseEntity<CreateTaskDTO> create(@Valid @RequestBody CreateTaskDTO dto) {
+        CreateTaskDTO newTask = taskService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(newTask);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskDTO> update(@PathVariable Long id, @Valid @RequestBody TaskDTO dto) {
-        TaskDTO updatedTask = taskService.update(id, dto);
+    public ResponseEntity<ResponseTaskDTO> update(@PathVariable Long id, @Valid @RequestBody CreateTaskDTO dto) {
+        ResponseTaskDTO updatedTask = taskService.update(id, dto);
         return ResponseEntity.ok(updatedTask);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<TaskDTO> partialUpdate(@PathVariable Long id, @Valid @RequestBody UpdateTaskDTO dto) {
-        TaskDTO updatedTask = taskService.partialUpdate(id, dto);
+    public ResponseEntity<ResponseTaskDTO> partialUpdate(@PathVariable Long id, @Valid @RequestBody UpdateTaskDTO dto) {
+        ResponseTaskDTO updatedTask = taskService.partialUpdate(id, dto);
         return ResponseEntity.ok(updatedTask);
     }
 

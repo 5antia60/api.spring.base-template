@@ -3,11 +3,7 @@ package com.santiago.base.modules.tasks.entity;
 import com.santiago.base.modules.tasks.model.TaskStatus;
 import com.santiago.base.modules.users.entity.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,7 +11,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tasks")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Task {
@@ -24,8 +21,6 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Título é obrigatório")
-    @Size(min = 3, max = 200, message = "Título deve ter entre 3 e 200 caracteres")
     @Column(nullable = false, length = 200)
     private String title;
 

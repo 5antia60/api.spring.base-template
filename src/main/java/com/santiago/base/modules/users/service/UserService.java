@@ -1,7 +1,8 @@
 package com.santiago.base.modules.users.service;
 
+import com.santiago.base.modules.users.dto.ResponseUserDTO;
 import com.santiago.base.modules.users.dto.UpdateUserDTO;
-import com.santiago.base.modules.users.dto.UserDTO;
+import com.santiago.base.modules.users.dto.CreateUserDTO;
 import com.santiago.base.modules.users.entity.User;
 import com.santiago.base.core.exceptions.ResourceNotFoundException;
 import com.santiago.base.core.exceptions.BusinessException;
@@ -20,22 +21,22 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public List<UserDTO> findAll() {
+    public List<ResponseUserDTO> findAll() {
         return userRepository.findAll()
                 .stream()
-                .map(this::convertToDTO)
+                .map(this::convertToResponseUserDTO)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public UserDTO findById(Long id) {
+    public ResponseUserDTO findById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
-        return convertToDTO(user);
+        return convertToResponseUserDTO(user);
     }
 
     @Transactional
-    public UserDTO update(Long id, UserDTO dto) {
+    public ResponseUserDTO update(Long id, CreateUserDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
 
@@ -47,11 +48,11 @@ public class UserService {
         user.setEmail(dto.getEmail());
 
         User updatedUser = userRepository.save(user);
-        return convertToDTO(updatedUser);
+        return convertToResponseUserDTO(updatedUser);
     }
 
     @Transactional
-    public UserDTO partialUpdate(Long id, UpdateUserDTO dto) {
+    public ResponseUserDTO partialUpdate(Long id, UpdateUserDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
 
@@ -68,7 +69,7 @@ public class UserService {
         }
 
         User updatedUser = userRepository.save(user);
-        return convertToDTO(updatedUser);
+        return convertToResponseUserDTO(updatedUser);
     }
 
     @Transactional
@@ -80,8 +81,12 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    private UserDTO convertToDTO(User user) {
-        UserDTO dto = new UserDTO();
+    private ResponseUserDTO convertToResponseUserDTO(User user) {
+        return new ResponseUserDTO(user);
+    }
+
+    private CreateUserDTO convertToCreateUserDTO(User user) {
+        CreateUserDTO dto = new CreateUserDTO();
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());

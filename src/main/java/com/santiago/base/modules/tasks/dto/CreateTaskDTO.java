@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaskDTO {
+public class CreateTaskDTO {
     private Long id;
 
     @NotBlank(message = "Título é obrigatório")
