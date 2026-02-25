@@ -28,7 +28,7 @@ public class TaskService {
         return taskRepository.findAll()
                 .stream()
                 .map(this::convertToResponseTaskDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -43,7 +43,7 @@ public class TaskService {
         return taskRepository.findByUserId(userId)
                 .stream()
                 .map(this::convertToResponseTaskDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional

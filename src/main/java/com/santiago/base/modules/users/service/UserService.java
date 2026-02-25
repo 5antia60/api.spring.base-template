@@ -25,7 +25,7 @@ public class UserService {
         return userRepository.findAll()
                 .stream()
                 .map(this::convertToResponseUserDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional(readOnly = true)
