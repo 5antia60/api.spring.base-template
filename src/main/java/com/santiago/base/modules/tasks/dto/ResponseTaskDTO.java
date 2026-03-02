@@ -4,7 +4,7 @@ import com.santiago.base.modules.tasks.entity.Task;
 import com.santiago.base.modules.tasks.model.TaskStatus;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 public class ResponseTaskDTO {
@@ -26,6 +26,6 @@ public class ResponseTaskDTO {
     private TaskStatus status;
     private Long userId;
     private String userName;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Instant createdAt;
+    private Instant updatedAt;
 }

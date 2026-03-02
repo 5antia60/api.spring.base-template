@@ -1,9 +1,9 @@
 package com.santiago.base.core.exceptions;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public record ErrorResponse(
         int status,
         String message,
-        LocalDateTime timestamp
+        Instant timestamp
 ) {}

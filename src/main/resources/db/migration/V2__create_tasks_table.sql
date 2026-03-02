@@ -4,6 +4,6 @@ CREATE TABLE tasks (
                        description TEXT,
                        status      VARCHAR(20)    NOT NULL DEFAULT 'PENDING',
                        user_id    BIGINT         NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-                       created_at TIMESTAMP      NOT NULL DEFAULT NOW(),
-                       updated_at TIMESTAMP
+                       created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+                       updated_at TIMESTAMP WITH TIME ZONE
 );

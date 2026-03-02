@@ -4,7 +4,7 @@ import com.santiago.base.modules.users.entity.User;
 import com.santiago.base.modules.users.model.UserRole;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 public class ResponseUserDTO {
@@ -22,6 +22,6 @@ public class ResponseUserDTO {
     private String name;
     private String email;
     private UserRole role;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Instant createdAt;
+    private Instant updatedAt;
 }
