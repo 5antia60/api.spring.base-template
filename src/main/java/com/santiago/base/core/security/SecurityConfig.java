@@ -39,6 +39,13 @@ public class SecurityConfig {
                         {"status": 401, "message": "Não autenticado. Envie um token JWT válido."}
                     """);
                         })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.getWriter().write("""
+                    {"status": 403, "message": "Você não tem permissão para acessar este recurso."}
+                """);
+                        })
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
