@@ -1,18 +1,20 @@
 package com.santiago.base.modules.users.controller;
 
+import com.santiago.base.core.pagination.dto.PaginatedResponseDTO;
+import com.santiago.base.modules.users.dto.CreateUserDTO;
 import com.santiago.base.modules.users.dto.ResponseUserDTO;
 import com.santiago.base.modules.users.dto.UpdateUserDTO;
-import com.santiago.base.modules.users.dto.CreateUserDTO;
 import com.santiago.base.modules.users.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -25,8 +27,11 @@ public class UserController {
     @Operation(summary = "Busca todos os usuários", description = "Retorna lista paginada de usuários")
     @ApiResponse(responseCode = "200", description = "Sucesso")
     @GetMapping
-    public ResponseEntity<List<ResponseUserDTO>> findAll() {
-        List<ResponseUserDTO> users = userService.findAll();
+    public ResponseEntity<PaginatedResponseDTO<ResponseUserDTO>> findAll(
+            @ParameterObject
+            @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable
+    ) {
+        PaginatedResponseDTO<ResponseUserDTO> users = userService.findAll(pageable);
         return ResponseEntity.ok(users);
     }
 

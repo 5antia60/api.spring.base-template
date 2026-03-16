@@ -1,20 +1,20 @@
 package com.santiago.base.modules.tasks.service;
 
+import com.santiago.base.core.exceptions.ResourceNotFoundException;
+import com.santiago.base.core.pagination.dto.PaginatedResponseDTO;
+import com.santiago.base.core.pagination.service.PaginationService;
 import com.santiago.base.modules.tasks.dto.CreateTaskDTO;
 import com.santiago.base.modules.tasks.dto.ResponseTaskDTO;
 import com.santiago.base.modules.tasks.dto.UpdateTaskDTO;
-import com.santiago.base.core.exceptions.ResourceNotFoundException;
 import com.santiago.base.modules.tasks.entity.Task;
-import com.santiago.base.modules.users.entity.User;
 import com.santiago.base.modules.tasks.model.TaskStatus;
 import com.santiago.base.modules.tasks.repository.TaskRepository;
+import com.santiago.base.modules.users.entity.User;
 import com.santiago.base.modules.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +22,22 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final PaginationService paginationService;
 
     @Transactional(readOnly = true)
-    public List<ResponseTaskDTO> findAll() {
-        return taskRepository.findAll()
-                .stream()
-                .map(this::convertToResponseTaskDTO)
-                .toList();
+    public PaginatedResponseDTO<ResponseTaskDTO> findAll(Pageable pageable) {
+        return paginationService.build(
+                taskRepository.findAll(pageable),
+                this::convertToResponseTaskDTO
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public PaginatedResponseDTO<ResponseTaskDTO> findByUserId(Long userId, Pageable pageable) {
+        return paginationService.build(
+                taskRepository.findByUserId(userId, pageable),
+                this::convertToResponseTaskDTO
+        );
     }
 
     @Transactional(readOnly = true)
@@ -36,14 +45,6 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + id));
         return convertToResponseTaskDTO(task);
-    }
-
-    @Transactional(readOnly = true)
-    public List<ResponseTaskDTO> findByUserId(Long userId) {
-        return taskRepository.findByUserId(userId)
-                .stream()
-                .map(this::convertToResponseTaskDTO)
-                .toList();
     }
 
     @Transactional

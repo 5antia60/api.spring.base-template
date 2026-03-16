@@ -1,31 +1,32 @@
 package com.santiago.base.modules.users.service;
 
+import com.santiago.base.core.exceptions.BusinessException;
+import com.santiago.base.core.exceptions.ResourceNotFoundException;
+import com.santiago.base.core.pagination.dto.PaginatedResponseDTO;
+import com.santiago.base.core.pagination.service.PaginationService;
+import com.santiago.base.modules.users.dto.CreateUserDTO;
 import com.santiago.base.modules.users.dto.ResponseUserDTO;
 import com.santiago.base.modules.users.dto.UpdateUserDTO;
-import com.santiago.base.modules.users.dto.CreateUserDTO;
 import com.santiago.base.modules.users.entity.User;
-import com.santiago.base.core.exceptions.ResourceNotFoundException;
-import com.santiago.base.core.exceptions.BusinessException;
 import com.santiago.base.modules.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PaginationService paginationService;
 
     @Transactional(readOnly = true)
-    public List<ResponseUserDTO> findAll() {
-        return userRepository.findAll()
-                .stream()
-                .map(this::convertToResponseUserDTO)
-                .toList();
+    public PaginatedResponseDTO<ResponseUserDTO> findAll(Pageable pageable) {
+        return paginationService.build(
+                userRepository.findAll(pageable),
+                this::convertToResponseUserDTO
+        );
     }
 
     @Transactional(readOnly = true)
@@ -83,15 +84,5 @@ public class UserService {
 
     private ResponseUserDTO convertToResponseUserDTO(User user) {
         return new ResponseUserDTO(user);
-    }
-
-    private CreateUserDTO convertToCreateUserDTO(User user) {
-        CreateUserDTO dto = new CreateUserDTO();
-        dto.setId(user.getId());
-        dto.setName(user.getName());
-        dto.setEmail(user.getEmail());
-        dto.setCreatedAt(user.getCreatedAt());
-        dto.setUpdatedAt(user.getUpdatedAt());
-        return dto;
     }
 }
