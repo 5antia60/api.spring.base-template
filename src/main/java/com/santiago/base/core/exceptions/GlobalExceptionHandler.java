@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
-                ex.getMessage(),
+                ex.getMessage() != null && !ex.getMessage().isEmpty() ? ex.getMessage() : "Recurso não encontrado.",
                 Instant.now()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
-                ex.getMessage(),
+                ex.getMessage() != null && !ex.getMessage().isEmpty() ? ex.getMessage() : "Não foi possível completar a sua ação.",
                 Instant.now()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.FORBIDDEN.value(),
-                "Você não tem permissão para acessar este recurso.",
+                ex.getMessage() != null && !ex.getMessage().isEmpty() ? ex.getMessage() : "Você não tem permissão para acessar este recurso.",
                 Instant.now()
         );
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
     ) {
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.UNAUTHORIZED.value(),
-                "Não autenticado. Envie um token JWT válido.",
+                ex.getMessage() != null && !ex.getMessage().isEmpty() ? ex.getMessage() : "Você não tem permissão para isso.",
                 Instant.now()
         );
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
