@@ -2,6 +2,7 @@ package com.santiago.base.modules.auth.service;
 
 import com.santiago.base.core.exceptions.BusinessException;
 import com.santiago.base.core.security.JwtService;
+import com.santiago.base.core.security.UserSessionModel;
 import com.santiago.base.modules.auth.dto.AuthResponseDTO;
 import com.santiago.base.modules.auth.dto.LoginRequestDTO;
 import com.santiago.base.modules.auth.dto.RegisterRequestDTO;
@@ -36,7 +37,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        String token = jwtService.generateToken(user);
+        String token = jwtService.generateToken(new UserSessionModel(user));
         return new AuthResponseDTO(token, user.getEmail(), user.getName(), user.getRole());
     }
 
@@ -48,7 +49,7 @@ public class AuthService {
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow();
 
-        String token = jwtService.generateToken(user);
+        String token = jwtService.generateToken(new UserSessionModel(user));
         return new AuthResponseDTO(token, user.getEmail(), user.getName(), user.getRole());
     }
 }

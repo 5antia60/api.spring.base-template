@@ -1,6 +1,7 @@
 package com.santiago.base.modules.users.controller;
 
 import com.santiago.base.core.pagination.dto.PaginatedResponseDTO;
+import com.santiago.base.core.security.UserSessionModel;
 import com.santiago.base.modules.users.dto.CreateUserDTO;
 import com.santiago.base.modules.users.dto.ResponseUserDTO;
 import com.santiago.base.modules.users.dto.UpdateUserDTO;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,8 +42,11 @@ public class UserController {
     @Operation(summary = "Busca o usuário por Id", description = "Retorna o usuário correspondente ao Id informado")
     @ApiResponse(responseCode = "200", description = "Sucesso")
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseUserDTO> findById(@PathVariable Long id) {
-        ResponseUserDTO user = userService.findById(id);
+    public ResponseEntity<ResponseUserDTO> findById(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserSessionModel requestUser
+    ) {
+        ResponseUserDTO user = userService.findById(id, requestUser);
         return ResponseEntity.ok(user);
     }
 

@@ -4,6 +4,7 @@ import com.santiago.base.core.exceptions.BusinessException;
 import com.santiago.base.core.exceptions.ResourceNotFoundException;
 import com.santiago.base.core.pagination.dto.PaginatedResponseDTO;
 import com.santiago.base.core.pagination.service.PaginationService;
+import com.santiago.base.core.security.UserSessionModel;
 import com.santiago.base.modules.users.dto.CreateUserDTO;
 import com.santiago.base.modules.users.dto.ResponseUserDTO;
 import com.santiago.base.modules.users.dto.UpdateUserDTO;
@@ -11,6 +12,7 @@ import com.santiago.base.modules.users.entity.User;
 import com.santiago.base.modules.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,9 +32,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseUserDTO findById(Long id) {
+    public ResponseUserDTO findById(Long id, UserSessionModel requestUser) {
+        if (!requestUser.getId().equals(id)) {
+            throw new AccessDeniedException("Você não tem permissão para acessar outros usuarios.");
+        }
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+
         return convertToResponseUserDTO(user);
     }
 
