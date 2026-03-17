@@ -40,7 +40,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.FORBIDDEN.value(),
-                ex.getMessage() != null && !ex.getMessage().isEmpty() ? ex.getMessage() : "Você não tem permissão para acessar este recurso.",
+                ex.getMessage() != null && !ex.getMessage().isEmpty() && !ex.getMessage().equals("Access Denied")
+                        ? ex.getMessage()
+                        : "Você não tem permissão para acessar este recurso.",
                 Instant.now()
         );
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
