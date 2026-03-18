@@ -15,7 +15,6 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +28,6 @@ public class UserController {
 
     @Operation(summary = "Busca todos os usuários", description = "Retorna lista paginada de usuários")
     @ApiResponse(responseCode = "200", description = "Sucesso")
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<PaginatedResponseDTO<ResponseUserDTO>> findAll(
             @ParameterObject
@@ -53,8 +51,12 @@ public class UserController {
     @Operation(summary = "Atualiza o usuário por Id", description = "Atualiza e retorna o usuário atualizado")
     @ApiResponse(responseCode = "200", description = "Sucesso")
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseUserDTO> update(@PathVariable Long id, @Valid @RequestBody CreateUserDTO dto) {
-        ResponseUserDTO updatedUser = userService.update(id, dto);
+    public ResponseEntity<ResponseUserDTO> update(
+            @PathVariable Long id,
+            @Valid @RequestBody CreateUserDTO dto,
+            @AuthenticationPrincipal UserSessionModel requestUser
+    ) {
+        ResponseUserDTO updatedUser = userService.update(id, dto, requestUser);
         return ResponseEntity.ok(updatedUser);
     }
 
@@ -63,9 +65,10 @@ public class UserController {
     @PatchMapping("/{id}")
     public ResponseEntity<ResponseUserDTO> partialUpdate(
             @PathVariable Long id,
-            @Valid @RequestBody UpdateUserDTO dto
+            @Valid @RequestBody UpdateUserDTO dto,
+            @AuthenticationPrincipal UserSessionModel requestUser
     ) {
-        ResponseUserDTO updatedUser = userService.partialUpdate(id, dto);
+        ResponseUserDTO updatedUser = userService.partialUpdate(id, dto, requestUser);
         return ResponseEntity.ok(updatedUser);
     }
 

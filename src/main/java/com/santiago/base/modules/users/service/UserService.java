@@ -9,6 +9,7 @@ import com.santiago.base.modules.users.dto.CreateUserDTO;
 import com.santiago.base.modules.users.dto.ResponseUserDTO;
 import com.santiago.base.modules.users.dto.UpdateUserDTO;
 import com.santiago.base.modules.users.entity.User;
+import com.santiago.base.modules.users.model.UserRole;
 import com.santiago.base.modules.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +34,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public ResponseUserDTO findById(Long id, UserSessionModel requestUser) {
-        if (!requestUser.getId().equals(id)) {
+        if (!requestUser.getId().equals(id) && requestUser.getRole() != UserRole.ADMIN) {
             throw new AccessDeniedException("Você não tem permissão para acessar outros usuarios.");
         }
 
@@ -44,7 +45,11 @@ public class UserService {
     }
 
     @Transactional
-    public ResponseUserDTO update(Long id, CreateUserDTO dto) {
+    public ResponseUserDTO update(Long id, CreateUserDTO dto, UserSessionModel requestUser) {
+        if (!requestUser.getId().equals(id) && !requestUser.getRole().equals(UserRole.ADMIN)) {
+            throw new AccessDeniedException("Você não tem permissão para alterar outros usuarios.");
+        }
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
 
@@ -60,7 +65,11 @@ public class UserService {
     }
 
     @Transactional
-    public ResponseUserDTO partialUpdate(Long id, UpdateUserDTO dto) {
+    public ResponseUserDTO partialUpdate(Long id, UpdateUserDTO dto, UserSessionModel requestUser) {
+        if (!requestUser.getId().equals(id) && requestUser.getRole() != UserRole.ADMIN) {
+            throw new AccessDeniedException("Você não tem permissão para alterar outros usuarios.");
+        }
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
 
