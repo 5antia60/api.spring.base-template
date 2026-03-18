@@ -90,6 +90,42 @@ public class UserService {
     }
 
     @Transactional
+    public ResponseUserDTO activate(Long id, UserSessionModel requestUser) {
+        if (requestUser.getRole() != UserRole.ADMIN) {
+            throw new AccessDeniedException("Você não tem permissão para ativar usuarios.");
+        }
+
+        if (!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Usuário não encontrado com id: " + id);
+        }
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+
+        user.setIsActive(true);
+        User updatedUser = userRepository.save(user);
+        return convertToResponseUserDTO(updatedUser);
+    }
+
+    @Transactional
+    public ResponseUserDTO deactivate(Long id, UserSessionModel requestUser) {
+        if (!requestUser.getId().equals(id) && requestUser.getRole() != UserRole.ADMIN) {
+            throw new AccessDeniedException("Você não tem permissão para desativar outros usuarios.");
+        }
+
+        if (!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Usuário não encontrado com id: " + id);
+        }
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+
+        user.setIsActive(false);
+        User updatedUser = userRepository.save(user);
+        return convertToResponseUserDTO(updatedUser);
+    }
+
+    @Transactional
     public void delete(Long id) {
         if (!userRepository.existsById(id)) {
             throw new ResourceNotFoundException("Usuário não encontrado com id: " + id);

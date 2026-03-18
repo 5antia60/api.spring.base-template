@@ -1,6 +1,7 @@
 package com.santiago.base.modules.tasks.controller;
 
 import com.santiago.base.core.pagination.dto.PaginatedResponseDTO;
+import com.santiago.base.core.security.UserSessionModel;
 import com.santiago.base.modules.tasks.dto.CreateTaskDTO;
 import com.santiago.base.modules.tasks.dto.ResponseTaskDTO;
 import com.santiago.base.modules.tasks.dto.UpdateTaskDTO;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -73,6 +76,30 @@ public class TaskController {
     @PatchMapping("/{id}")
     public ResponseEntity<ResponseTaskDTO> partialUpdate(@PathVariable Long id, @Valid @RequestBody UpdateTaskDTO dto) {
         ResponseTaskDTO updatedTask = taskService.partialUpdate(id, dto);
+        return ResponseEntity.ok(updatedTask);
+    }
+
+    @Operation(summary = "Ativa a tarefa por Id", description = "Ativa e retorna a tarefa atualizada")
+    @ApiResponse(responseCode = "200", description = "Sucesso")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/activate/{id}")
+    public ResponseEntity<ResponseTaskDTO> activate(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserSessionModel requestUser
+    ) {
+        ResponseTaskDTO updatedTask = taskService.activate(id, requestUser);
+        return ResponseEntity.ok(updatedTask);
+    }
+
+    @Operation(summary = "Desativa a tarefa por Id", description = "Desativa e retorna a tarefa atualizada")
+    @ApiResponse(responseCode = "200", description = "Sucesso")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/deactivate/{id}")
+    public ResponseEntity<ResponseTaskDTO> deactivate(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserSessionModel requestUser
+    ) {
+        ResponseTaskDTO updatedTask = taskService.deactivate(id, requestUser);
         return ResponseEntity.ok(updatedTask);
     }
 

@@ -15,6 +15,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,6 +70,29 @@ public class UserController {
             @AuthenticationPrincipal UserSessionModel requestUser
     ) {
         ResponseUserDTO updatedUser = userService.partialUpdate(id, dto, requestUser);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @Operation(summary = "Ativa o usuário por Id", description = "Ativa e retorna o usuário atualizado")
+    @ApiResponse(responseCode = "200", description = "Sucesso")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/activate/{id}")
+    public ResponseEntity<ResponseUserDTO> activate(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserSessionModel requestUser
+    ) {
+        ResponseUserDTO updatedUser = userService.activate(id, requestUser);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @Operation(summary = "Desativa o usuário por Id", description = "Desativa e retorna o usuário atualizado")
+    @ApiResponse(responseCode = "200", description = "Sucesso")
+    @PutMapping("/deactivate/{id}")
+    public ResponseEntity<ResponseUserDTO> deactivate(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserSessionModel requestUser
+    ) {
+        ResponseUserDTO updatedUser = userService.deactivate(id, requestUser);
         return ResponseEntity.ok(updatedUser);
     }
 

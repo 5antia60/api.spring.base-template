@@ -3,6 +3,7 @@ package com.santiago.base.modules.tasks.service;
 import com.santiago.base.core.exceptions.ResourceNotFoundException;
 import com.santiago.base.core.pagination.dto.PaginatedResponseDTO;
 import com.santiago.base.core.pagination.service.PaginationService;
+import com.santiago.base.core.security.UserSessionModel;
 import com.santiago.base.modules.tasks.dto.CreateTaskDTO;
 import com.santiago.base.modules.tasks.dto.ResponseTaskDTO;
 import com.santiago.base.modules.tasks.dto.UpdateTaskDTO;
@@ -10,9 +11,11 @@ import com.santiago.base.modules.tasks.entity.Task;
 import com.santiago.base.modules.tasks.model.TaskStatus;
 import com.santiago.base.modules.tasks.repository.TaskRepository;
 import com.santiago.base.modules.users.entity.User;
+import com.santiago.base.modules.users.model.UserRole;
 import com.santiago.base.modules.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,6 +94,42 @@ public class TaskService {
 
         Task updatedTask = taskRepository.save(task);
         return convertToResponseTaskDTO(updatedTask);
+    }
+
+    @Transactional
+    public ResponseTaskDTO activate(Long id, UserSessionModel requestUser) {
+        if (requestUser.getRole() != UserRole.ADMIN) {
+            throw new AccessDeniedException("Você não tem permissão para ativar tarefas.");
+        }
+
+        if (!taskRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Tarefa não encontrada com id: " + id);
+        }
+
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + id));
+
+        task.setIsActive(true);
+        Task updatedTask = taskRepository.save(task);
+        return this.convertToResponseTaskDTO(updatedTask);
+    }
+
+    @Transactional
+    public ResponseTaskDTO deactivate(Long id, UserSessionModel requestUser) {
+        if (requestUser.getRole() != UserRole.ADMIN) {
+            throw new AccessDeniedException("Você não tem permissão para desativar tarefas.");
+        }
+
+        if (!taskRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Tarefa não encontrado com id: " + id);
+        }
+
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+
+        task.setIsActive(false);
+        Task updatedTask = taskRepository.save(task);
+        return this.convertToResponseTaskDTO(updatedTask);
     }
 
     @Transactional
