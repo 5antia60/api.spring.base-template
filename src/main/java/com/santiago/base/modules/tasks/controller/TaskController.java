@@ -34,16 +34,10 @@ public class TaskController {
     public ResponseEntity<PaginatedResponseDTO<ResponseTaskDTO>> findAll(
             @RequestParam(required = false) Long userId,
             @ParameterObject
-            @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable
+            @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable,
+            @AuthenticationPrincipal UserSessionModel requestUser
     ) {
-        PaginatedResponseDTO<ResponseTaskDTO> tasks;
-
-        if (userId != null) {
-            tasks = taskService.findByUserId(userId, pageable);
-        } else {
-            tasks = taskService.findAll(pageable);
-        }
-
+        PaginatedResponseDTO<ResponseTaskDTO> tasks = taskService.baseFindAll(userId, pageable, requestUser);
         return ResponseEntity.ok(tasks);
     }
 

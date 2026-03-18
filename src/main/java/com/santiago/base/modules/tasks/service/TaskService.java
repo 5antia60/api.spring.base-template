@@ -27,6 +27,15 @@ public class TaskService {
     private final UserRepository userRepository;
     private final PaginationService paginationService;
 
+    public PaginatedResponseDTO<ResponseTaskDTO> baseFindAll(Long userId, Pageable pageable, UserSessionModel requestUser) {
+        if (userId != null || !requestUser.getRole().equals(UserRole.ADMIN)) {
+            Long targetUserId = userId != null ? userId : requestUser.getId();
+            return findByUserId(targetUserId, pageable);
+        } else {
+            return findAll(pageable);
+        }
+    }
+
     @Transactional(readOnly = true)
     public PaginatedResponseDTO<ResponseTaskDTO> findAll(Pageable pageable) {
         return paginationService.build(
