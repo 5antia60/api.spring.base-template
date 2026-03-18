@@ -1,6 +1,6 @@
 package com.santiago.base.modules.tasks.entity;
 
-import com.santiago.base.core.entity.BaseEntity;
+import com.santiago.base.core.base.BaseEntity;
 import com.santiago.base.modules.tasks.model.TaskStatus;
 import com.santiago.base.modules.users.entity.User;
 import jakarta.persistence.*;

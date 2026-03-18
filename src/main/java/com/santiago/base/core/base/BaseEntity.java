@@ -1,4 +1,4 @@
-package com.santiago.base.core.entity;
+package com.santiago.base.core.base;
 
 import jakarta.persistence.*;
 import lombok.Getter;

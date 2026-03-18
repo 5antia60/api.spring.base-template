@@ -1,6 +1,6 @@
 package com.santiago.base.modules.users.entity;
 
-import com.santiago.base.core.entity.BaseEntity;
+import com.santiago.base.core.base.BaseEntity;
 import com.santiago.base.modules.tasks.entity.Task;
 import com.santiago.base.modules.users.model.UserRole;
 import jakarta.persistence.*;
