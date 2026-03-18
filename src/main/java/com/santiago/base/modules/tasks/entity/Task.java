@@ -1,13 +1,10 @@
 package com.santiago.base.modules.tasks.entity;
 
+import com.santiago.base.core.entity.BaseEntity;
 import com.santiago.base.modules.tasks.model.TaskStatus;
 import com.santiago.base.modules.users.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.Instant;
 
 @Entity
 @Table(name = "tasks")
@@ -15,11 +12,7 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Task {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Task extends BaseEntity {
 
     @Column(nullable = false, length = 200)
     private String title;
@@ -34,12 +27,4 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private User user;
-
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private Instant createdAt;
-
-    @UpdateTimestamp
-    @Column
-    private Instant updatedAt;
 }

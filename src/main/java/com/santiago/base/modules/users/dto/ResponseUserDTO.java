@@ -11,17 +11,19 @@ public class ResponseUserDTO {
 
     public ResponseUserDTO(User entity) {
         this.id = entity.getId();
+        this.isActive = entity.getIsActive();
+        this.createdAt = entity.getCreatedAt();
+        this.updatedAt = entity.getUpdatedAt();
         this.name = entity.getName();
         this.role = entity.getRole();
         this.email = entity.getEmail();
-        this.createdAt = entity.getCreatedAt();
-        this.updatedAt = entity.getUpdatedAt();
     }
 
     private Long id;
+    private Boolean isActive;
+    private Instant createdAt;
+    private Instant updatedAt;
     private String name;
     private String email;
     private UserRole role;
-    private Instant createdAt;
-    private Instant updatedAt;
 }

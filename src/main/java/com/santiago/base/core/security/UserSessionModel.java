@@ -18,6 +18,7 @@ public class UserSessionModel implements UserDetails {
     private final String email;
     private final String password;
     private final UserRole role;
+    private final boolean isActive;
 
     public UserSessionModel(User user) {
         this.id = user.getId();
@@ -25,6 +26,7 @@ public class UserSessionModel implements UserDetails {
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.role = user.getRole();
+        this.isActive = user.getIsActive();
     }
 
     @Override
@@ -40,5 +42,10 @@ public class UserSessionModel implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isActive;
     }
 }
