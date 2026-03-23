@@ -75,4 +75,4 @@ To create a new migration, add a new file following the pattern:
 V3__migration_name.sql
 ``` 
 
-When the application starts, the migration will be executed according to the project's current configuration.
+Flyway runs automatically when the application starts up, provided that `spring.flyway.enabled=true`.
