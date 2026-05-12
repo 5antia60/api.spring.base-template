@@ -2,7 +2,7 @@ package com.santiago.base.modules.users.controller;
 
 import com.santiago.base.core.pagination.dto.PaginatedResponseDTO;
 import com.santiago.base.core.security.UserSessionModel;
-import com.santiago.base.modules.users.dto.CreateUserDTO;
+import com.santiago.base.modules.users.dto.UserDTO;
 import com.santiago.base.modules.users.dto.ResponseUserDTO;
 import com.santiago.base.modules.users.dto.UpdateUserDTO;
 import com.santiago.base.modules.users.service.UserService;
@@ -54,7 +54,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponseUserDTO> update(
             @PathVariable Long id,
-            @Valid @RequestBody CreateUserDTO dto,
+            @Valid @RequestBody UserDTO dto,
             @AuthenticationPrincipal UserSessionModel requestUser
     ) {
         ResponseUserDTO updatedUser = userService.update(id, dto, requestUser);
