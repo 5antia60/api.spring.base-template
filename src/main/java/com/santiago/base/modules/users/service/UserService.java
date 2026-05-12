@@ -95,10 +95,6 @@ public class UserService {
             throw new AccessDeniedException("Você não tem permissão para ativar usuarios.");
         }
 
-        if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Usuário não encontrado com id: " + id);
-        }
-
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
 
@@ -113,10 +109,6 @@ public class UserService {
             throw new AccessDeniedException("Você não tem permissão para desativar outros usuarios.");
         }
 
-        if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Usuário não encontrado com id: " + id);
-        }
-
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
 
@@ -127,11 +119,10 @@ public class UserService {
 
     @Transactional
     public void delete(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Usuário não encontrado com id: " + id);
-        }
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
 
-        userRepository.deleteById(id);
+        userRepository.delete(user);
     }
 
     private ResponseUserDTO convertToResponseUserDTO(User user) {

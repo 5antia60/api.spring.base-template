@@ -111,10 +111,6 @@ public class TaskService {
             throw new AccessDeniedException("Você não tem permissão para ativar tarefas.");
         }
 
-        if (!taskRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Tarefa não encontrada com id: " + id);
-        }
-
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + id));
 
@@ -129,10 +125,6 @@ public class TaskService {
             throw new AccessDeniedException("Você não tem permissão para desativar tarefas.");
         }
 
-        if (!taskRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Tarefa não encontrado com id: " + id);
-        }
-
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
 
@@ -143,10 +135,10 @@ public class TaskService {
 
     @Transactional
     public void delete(Long id) {
-        if (!taskRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Tarefa não encontrada com id: " + id);
-        }
-        taskRepository.deleteById(id);
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + id));
+
+        taskRepository.delete(task);
     }
 
     private ResponseTaskDTO convertToResponseTaskDTO(Task task) {
