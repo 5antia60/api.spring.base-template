@@ -1,6 +1,7 @@
 package com.santiago.base.modules.tasks.service;
 
 import com.santiago.base.core.exceptions.ResourceNotFoundException;
+import com.santiago.base.core.event.DomainEvent;
 import com.santiago.base.core.pagination.dto.PaginatedResponseDTO;
 import com.santiago.base.core.pagination.service.PaginationService;
 import com.santiago.base.core.security.UserSessionModel;
@@ -8,12 +9,14 @@ import com.santiago.base.modules.tasks.dto.CreateTaskDTO;
 import com.santiago.base.modules.tasks.dto.ResponseTaskDTO;
 import com.santiago.base.modules.tasks.dto.UpdateTaskDTO;
 import com.santiago.base.modules.tasks.entity.Task;
+import com.santiago.base.core.event.EventType;
 import com.santiago.base.modules.tasks.model.TaskStatus;
 import com.santiago.base.modules.tasks.repository.TaskRepository;
 import com.santiago.base.modules.users.entity.User;
 import com.santiago.base.modules.users.model.UserRole;
 import com.santiago.base.modules.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final PaginationService paginationService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public PaginatedResponseDTO<ResponseTaskDTO> baseFindAll(Long userId, Pageable pageable, UserSessionModel requestUser) {
         if (userId != null || !requestUser.getRole().equals(UserRole.ADMIN)) {
@@ -68,6 +72,7 @@ public class TaskService {
         task.setUser(user);
 
         Task newTask = taskRepository.save(task);
+        eventPublisher.publishEvent(new DomainEvent<>(EventType.CREATED_TASK, newTask));
         return convertToCreateTaskDTO(newTask);
     }
 
@@ -81,6 +86,7 @@ public class TaskService {
         task.setStatus(dto.getStatus());
 
         Task updatedTask = taskRepository.save(task);
+        eventPublisher.publishEvent(new DomainEvent<>(EventType.UPDATED_TASK, updatedTask));
         return convertToResponseTaskDTO(updatedTask);
     }
 
@@ -102,6 +108,7 @@ public class TaskService {
         }
 
         Task updatedTask = taskRepository.save(task);
+        eventPublisher.publishEvent(new DomainEvent<>(EventType.UPDATED_TASK, updatedTask));
         return convertToResponseTaskDTO(updatedTask);
     }
 
@@ -135,10 +142,11 @@ public class TaskService {
 
     @Transactional
     public void delete(Long id) {
-        Task task = taskRepository.findById(id)
+        Task deletedTask = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + id));
 
-        taskRepository.delete(task);
+        eventPublisher.publishEvent(new DomainEvent<>(EventType.DELETED_TASK, deletedTask));
+        taskRepository.delete(deletedTask);
     }
 
     private ResponseTaskDTO convertToResponseTaskDTO(Task task) {
