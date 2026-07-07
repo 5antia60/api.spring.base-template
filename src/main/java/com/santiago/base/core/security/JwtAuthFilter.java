@@ -52,7 +52,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 if (!userDetails.isEnabled()) {
-                    throw new DisabledException("Sua conta está desativada.");
+                    throw new DisabledException("auth.account.disabled");
                 }
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

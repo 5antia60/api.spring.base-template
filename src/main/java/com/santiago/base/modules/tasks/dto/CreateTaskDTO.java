@@ -16,16 +16,16 @@ import java.time.Instant;
 public class CreateTaskDTO {
     private Long id;
 
-    @NotBlank(message = "Título é obrigatório")
-    @Size(min = 3, max = 200)
+    @NotBlank(message = "{validation.task.title.notBlank}")
+    @Size(min = 3, max = 200, message = "{validation.task.title.size}")
     private String title;
 
     private String description;
 
-    @NotNull(message = "Status é obrigatório")
+    @NotNull(message = "{validation.task.status.notNull}")
     private TaskStatus status;
 
-    @NotNull(message = "ID do usuário é obrigatório")
+    @NotNull(message = "{validation.task.userId.notNull}")
     private Long userId;
 
     private String userName;

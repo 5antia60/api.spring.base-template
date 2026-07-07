@@ -1,11 +1,11 @@
 package com.santiago.base.core.pagination.service;
 
+import com.santiago.base.core.exceptions.BusinessException;
 import com.santiago.base.core.pagination.dto.PaginatedResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -34,7 +34,6 @@ class PaginationServiceTest {
         Page<Integer> page = new PageImpl<>(List.of(), PageRequest.of(0, 1000), 0);
 
         assertThatThrownBy(() -> paginationService.build(page, Object::toString))
-                .isInstanceOf(ResponseStatusException.class)
-                .hasMessageContaining("400 BAD_REQUEST");
+                .isInstanceOf(BusinessException.class);
     }
 }

@@ -2,7 +2,6 @@ package com.santiago.base.core.security;
 
 import com.santiago.base.modules.users.model.UserRole;
 import lombok.RequiredArgsConstructor;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -29,26 +28,17 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsService userDetailsService;
+    private final SecurityErrorHandler securityErrorHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.setContentType("application/json;charset=UTF-8");
-                            response.getWriter().write("""
-                        {"status": 401, "message": "Não autenticado. Envie um token JWT válido."}
-                    """);
-                        })
-                        .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                            response.setContentType("application/json;charset=UTF-8");
-                            response.getWriter().write("""
-                    {"status": 403, "message": "Você não tem permissão para acessar este recurso."}
-                """);
-                        })
+                        .authenticationEntryPoint((request, response, authException) ->
+                                securityErrorHandler.writeUnauthorized(request, response))
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                securityErrorHandler.writeForbidden(request, response))
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(

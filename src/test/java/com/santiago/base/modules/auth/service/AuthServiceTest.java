@@ -93,7 +93,7 @@ class AuthServiceTest {
 
             assertThatThrownBy(() -> authService.register(dto))
                     .isInstanceOf(BusinessException.class)
-                    .hasMessageContaining("dup@example.com");
+                    .hasMessage("user.email.alreadyExists");
 
             verify(userRepository, never()).save(any());
         }
@@ -145,7 +145,7 @@ class AuthServiceTest {
         @Test
         @DisplayName("should propagate InvalidRefreshTokenException from rotation")
         void shouldPropagateInvalidRefreshToken() {
-            when(refreshTokenService.rotate("bad")).thenThrow(new InvalidRefreshTokenException("invalid"));
+            when(refreshTokenService.rotate("bad")).thenThrow(new InvalidRefreshTokenException("auth.refreshToken.invalid"));
 
             assertThatThrownBy(() -> authService.refresh("bad"))
                     .isInstanceOf(InvalidRefreshTokenException.class);
@@ -167,7 +167,7 @@ class AuthServiceTest {
         @Test
         @DisplayName("should ignore InvalidRefreshTokenException during logout (idempotent)")
         void shouldBeIdempotentWhenTokenInvalid() {
-            doThrow(new InvalidRefreshTokenException("invalid"))
+            doThrow(new InvalidRefreshTokenException("auth.refreshToken.invalid"))
                     .when(refreshTokenService).revoke("bad");
 
             authService.logout("bad");

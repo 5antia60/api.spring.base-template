@@ -1,7 +1,9 @@
 package com.santiago.base.modules.auth.refresh.service;
 
-public class InvalidRefreshTokenException extends RuntimeException {
-    public InvalidRefreshTokenException(String message) {
-        super(message);
+import com.santiago.base.core.exceptions.BaseException;
+
+public class InvalidRefreshTokenException extends BaseException {
+    public InvalidRefreshTokenException(String messageKey, Object... args) {
+        super(messageKey, args);
     }
 }

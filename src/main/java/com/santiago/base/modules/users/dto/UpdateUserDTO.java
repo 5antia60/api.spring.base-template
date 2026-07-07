@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 public class UpdateUserDTO {
     private Long id;
 
-    @Size(min = 3, max = 100)
+    @Size(min = 3, max = 100, message = "{validation.user.name.size}")
     private String name;
 
-    @Email(message = "Email inválido")
+    @Email(message = "{validation.user.email.invalid}")
     private String email;
 }

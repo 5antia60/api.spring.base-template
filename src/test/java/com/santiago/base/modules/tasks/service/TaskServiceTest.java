@@ -168,7 +168,7 @@ class TaskServiceTest {
 
             assertThatThrownBy(() -> taskService.findById(1L))
                     .isInstanceOf(ResourceNotFoundException.class)
-                    .hasMessageContaining("1");
+                    .hasMessage("task.notFound");
         }
     }
 
@@ -342,7 +342,7 @@ class TaskServiceTest {
 
                 assertThatThrownBy(() -> taskService.create(dto))
                         .isInstanceOf(ResourceNotFoundException.class)
-                        .hasMessageContaining("1");
+                        .hasMessage("user.notFound");
             }
 
             @Test
@@ -511,7 +511,7 @@ class TaskServiceTest {
         void shouldDenyAccessForNonAdminUser() {
             assertThatThrownBy(() -> taskService.activate(1L, session(1L, UserRole.USER)))
                     .isInstanceOf(AccessDeniedException.class)
-                    .hasMessageContaining("permissão");
+                    .hasMessage("task.accessDenied.activate");
         }
 
         @Test

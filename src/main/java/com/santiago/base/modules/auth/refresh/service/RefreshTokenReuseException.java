@@ -1,7 +1,9 @@
 package com.santiago.base.modules.auth.refresh.service;
 
-public class RefreshTokenReuseException extends RuntimeException {
-    public RefreshTokenReuseException(String message) {
-        super(message);
+import com.santiago.base.core.exceptions.BaseException;
+
+public class RefreshTokenReuseException extends BaseException {
+    public RefreshTokenReuseException(String messageKey, Object... args) {
+        super(messageKey, args);
     }
 }

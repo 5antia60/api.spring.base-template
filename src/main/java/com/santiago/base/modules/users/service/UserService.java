@@ -35,11 +35,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public ResponseUserDTO findById(Long id, UserSessionModel requestUser) {
         if (!requestUser.getId().equals(id) && requestUser.getRole() != UserRole.ADMIN) {
-            throw new AccessDeniedException("Você não tem permissão para acessar outros usuarios.");
+            throw new AccessDeniedException("user.accessDenied.viewOthers");
         }
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("user.notFound", id));
 
         return convertToResponseUserDTO(user);
     }
@@ -47,14 +47,14 @@ public class UserService {
     @Transactional
     public ResponseUserDTO update(Long id, UserDTO dto, UserSessionModel requestUser) {
         if (!requestUser.getId().equals(id) && !requestUser.getRole().equals(UserRole.ADMIN)) {
-            throw new AccessDeniedException("Você não tem permissão para alterar outros usuarios.");
+            throw new AccessDeniedException("user.accessDenied.updateOthers");
         }
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("user.notFound", id));
 
         if (!user.getEmail().equals(dto.email()) && userRepository.existsByEmail(dto.email())) {
-            throw new BusinessException("Email já cadastrado: " + dto.email());
+            throw new BusinessException("user.email.alreadyExists", dto.email());
         }
 
         user.setName(dto.name());
@@ -67,11 +67,11 @@ public class UserService {
     @Transactional
     public ResponseUserDTO partialUpdate(Long id, UpdateUserDTO dto, UserSessionModel requestUser) {
         if (!requestUser.getId().equals(id) && requestUser.getRole() != UserRole.ADMIN) {
-            throw new AccessDeniedException("Você não tem permissão para alterar outros usuarios.");
+            throw new AccessDeniedException("user.accessDenied.updateOthers");
         }
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("user.notFound", id));
 
         if (dto.getName() != null) {
             user.setName(dto.getName());
@@ -79,7 +79,7 @@ public class UserService {
 
         if (dto.getEmail() != null) {
             if (!user.getEmail().equals(dto.getEmail()) && userRepository.existsByEmail(dto.getEmail())) {
-                throw new BusinessException("Email já cadastrado: " + dto.getEmail());
+                throw new BusinessException("user.email.alreadyExists", dto.getEmail());
             }
 
             user.setEmail(dto.getEmail());
@@ -92,11 +92,11 @@ public class UserService {
     @Transactional
     public ResponseUserDTO activate(Long id, UserSessionModel requestUser) {
         if (requestUser.getRole() != UserRole.ADMIN) {
-            throw new AccessDeniedException("Você não tem permissão para ativar usuarios.");
+            throw new AccessDeniedException("user.accessDenied.activate");
         }
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("user.notFound", id));
 
         user.setIsActive(true);
         User updatedUser = userRepository.save(user);
@@ -106,11 +106,11 @@ public class UserService {
     @Transactional
     public ResponseUserDTO deactivate(Long id, UserSessionModel requestUser) {
         if (!requestUser.getId().equals(id) && requestUser.getRole() != UserRole.ADMIN) {
-            throw new AccessDeniedException("Você não tem permissão para desativar outros usuarios.");
+            throw new AccessDeniedException("user.accessDenied.deactivateOthers");
         }
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("user.notFound", id));
 
         user.setIsActive(false);
         User updatedUser = userRepository.save(user);
@@ -120,7 +120,7 @@ public class UserService {
     @Transactional
     public void delete(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("user.notFound", id));
 
         userRepository.delete(user);
     }

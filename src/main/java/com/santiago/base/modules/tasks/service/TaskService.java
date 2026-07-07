@@ -59,14 +59,14 @@ public class TaskService {
     @Transactional(readOnly = true)
     public ResponseTaskDTO findById(Long id) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("task.notFound", id));
         return convertToResponseTaskDTO(task);
     }
 
     @Transactional
     public CreateTaskDTO create(CreateTaskDTO dto) {
         User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + dto.getUserId()));
+                .orElseThrow(() -> new ResourceNotFoundException("user.notFound", dto.getUserId()));
 
         Task task = convertToEntity(dto);
         task.setUser(user);
@@ -79,7 +79,7 @@ public class TaskService {
     @Transactional
     public ResponseTaskDTO update(Long id, CreateTaskDTO dto) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("task.notFound", id));
 
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
@@ -93,7 +93,7 @@ public class TaskService {
     @Transactional
     public ResponseTaskDTO partialUpdate(Long id, UpdateTaskDTO dto) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("task.notFound", id));
 
         if (dto.getTitle() != null) {
             task.setTitle(dto.getTitle());
@@ -115,11 +115,11 @@ public class TaskService {
     @Transactional
     public ResponseTaskDTO activate(Long id, UserSessionModel requestUser) {
         if (requestUser.getRole() != UserRole.ADMIN) {
-            throw new AccessDeniedException("Você não tem permissão para ativar tarefas.");
+            throw new AccessDeniedException("task.accessDenied.activate");
         }
 
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("task.notFound", id));
 
         task.setIsActive(true);
         Task updatedTask = taskRepository.save(task);
@@ -129,11 +129,11 @@ public class TaskService {
     @Transactional
     public ResponseTaskDTO deactivate(Long id, UserSessionModel requestUser) {
         if (requestUser.getRole() != UserRole.ADMIN) {
-            throw new AccessDeniedException("Você não tem permissão para desativar tarefas.");
+            throw new AccessDeniedException("task.accessDenied.deactivate");
         }
 
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("task.notFound", id));
 
         task.setIsActive(false);
         Task updatedTask = taskRepository.save(task);
@@ -143,7 +143,7 @@ public class TaskService {
     @Transactional
     public void delete(Long id) {
         Task deletedTask = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("task.notFound", id));
 
         eventPublisher.publishEvent(new DomainEvent<>(EventType.DELETED_TASK, deletedTask));
         taskRepository.delete(deletedTask);

@@ -31,7 +31,7 @@ public class AuthService {
     @Transactional
     public AuthResponseDTO register(RegisterRequestDTO request) {
         if (userRepository.existsByEmail(request.email())) {
-            throw new BusinessException("Email já cadastrado: " + request.email());
+            throw new BusinessException("user.email.alreadyExists", request.email());
         }
 
         User user = new User();

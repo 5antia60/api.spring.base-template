@@ -36,16 +36,16 @@ public class RefreshTokenService {
     public RotationResult rotate(String rawToken) {
         String hash = sha256(rawToken);
         RefreshToken existing = refreshTokenRepository.findByTokenHash(hash)
-                .orElseThrow(() -> new InvalidRefreshTokenException("Refresh token inválido ou expirado."));
+                .orElseThrow(() -> new InvalidRefreshTokenException("auth.refreshToken.invalid"));
 
         if (existing.isExpired()) {
             revokeFamily(existing.getFamily());
-            throw new InvalidRefreshTokenException("Refresh token expirado. Faça login novamente.");
+            throw new InvalidRefreshTokenException("auth.refreshToken.expired");
         }
 
         if (existing.isRevoked()) {
             revokeFamily(existing.getFamily());
-            throw new RefreshTokenReuseException("Reuso de refresh token detectado. Todas as sessões foram revogadas.");
+            throw new RefreshTokenReuseException("auth.refreshToken.reuseDetected");
         }
 
         String newRawToken = generateRawToken();

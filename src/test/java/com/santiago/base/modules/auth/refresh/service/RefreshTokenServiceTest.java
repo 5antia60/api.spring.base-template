@@ -126,7 +126,7 @@ class RefreshTokenServiceTest {
 
             assertThatThrownBy(() -> refreshTokenService.rotate("expired"))
                     .isInstanceOf(InvalidRefreshTokenException.class)
-                    .hasMessageContaining("expirado");
+                    .hasMessage("auth.refreshToken.expired");
 
             verify(refreshTokenRepository).revokeFamily(expired.getFamily());
             verify(refreshTokenRepository, never()).save(any());
@@ -148,7 +148,7 @@ class RefreshTokenServiceTest {
 
             assertThatThrownBy(() -> refreshTokenService.rotate("reused"))
                     .isInstanceOf(RefreshTokenReuseException.class)
-                    .hasMessageContaining("Reuso");
+                    .hasMessage("auth.refreshToken.reuseDetected");
 
             verify(refreshTokenRepository).revokeFamily(alreadyRevoked.getFamily());
             verify(refreshTokenRepository, never()).save(any());

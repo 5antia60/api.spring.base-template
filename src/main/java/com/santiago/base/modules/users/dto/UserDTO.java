@@ -5,11 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record UserDTO(
-        @NotBlank(message = "Nome é obrigatório")
-        @Size(min = 3, max = 100)
+        @NotBlank(message = "{validation.user.name.notBlank}")
+        @Size(min = 3, max = 100, message = "{validation.user.name.size}")
         String name,
 
-        @NotBlank(message = "Email é obrigatório")
-        @Email(message = "Email inválido")
+        @NotBlank(message = "{validation.user.email.notBlank}")
+        @Email(message = "{validation.user.email.invalid}")
         String email
 ) {}

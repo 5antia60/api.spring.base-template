@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateTaskDTO {
 
-    @Size(min = 3, max = 200, message = "Título deve ter entre 3 e 200 caracteres")
+    @Size(min = 3, max = 200, message = "{validation.task.title.size}")
     private String title;
 
     private String description;

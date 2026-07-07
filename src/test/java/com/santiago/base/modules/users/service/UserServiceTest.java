@@ -104,7 +104,7 @@ class UserServiceTest {
 
         assertThatThrownBy(() -> userService.findById(1L, session(1L, UserRole.USER)))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("1");
+                .hasMessage("user.notFound");
     }
 
     @Test
@@ -163,7 +163,7 @@ class UserServiceTest {
 
         assertThatThrownBy(() -> userService.update(1L, dto, session(1L, UserRole.USER)))
                 .isInstanceOf(BusinessException.class)
-                .hasMessageContaining("duplicated@example.com");
+                .hasMessage("user.email.alreadyExists");
 
         verify(userRepository, never()).save(any());
     }
