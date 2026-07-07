@@ -8,6 +8,10 @@ import com.santiago.base.modules.tasks.model.TaskStatus;
 import com.santiago.base.modules.users.dto.UpdateUserDTO;
 import com.santiago.base.modules.users.dto.UserDTO;
 import com.santiago.base.modules.users.entity.User;
+import com.santiago.base.modules.auth.dto.LoginRequestDTO;
+import com.santiago.base.modules.auth.dto.LogoutRequestDTO;
+import com.santiago.base.modules.auth.dto.RefreshRequestDTO;
+import com.santiago.base.modules.auth.dto.RegisterRequestDTO;
 import com.santiago.base.modules.users.model.UserRole;
 
 import java.time.Instant;
@@ -56,6 +60,22 @@ public final class TestFixtures {
         dto.setName(name);
         dto.setEmail(email);
         return dto;
+    }
+
+    public static RegisterRequestDTO registerDto(String name, String email, String password) {
+        return new RegisterRequestDTO(name, email, password);
+    }
+
+    public static LoginRequestDTO loginDto(String email, String password) {
+        return new LoginRequestDTO(email, password);
+    }
+
+    public static RefreshRequestDTO refreshDto(String refreshToken) {
+        return new RefreshRequestDTO(refreshToken);
+    }
+
+    public static LogoutRequestDTO logoutDto(String refreshToken) {
+        return new LogoutRequestDTO(refreshToken);
     }
 
     public static CreateTaskDTO createTaskDto(Long userId) {
